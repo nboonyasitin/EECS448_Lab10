@@ -14,13 +14,13 @@ $query = "SELECT user_id FROM Users where user_id='".$username."'";
 
 if($result = mysql_query($query) || $username == "")
 {
-    echo "You have entered an invalid or preexisting username.</br>";
+    printf("You have entered an invalid or preexisting username.");
 }
 else
 {
     $query = "SELECT user_id FROM Users WHERE user_id='$username'";
     $result = mysqli_query($mysqli,$query);
-    echo "User has been saved.</br>";
+    printf("User has been saved.");
 }
 
 $query = "SELECT user_id";

@@ -11,36 +11,26 @@ $username = $_POST["username"];
 
 $query = "SELECT user_id FROM Users where user_id='".$username."'";
 
-if ($result = mysql_query($query)) 
-{
-    trigger_error('Exists.', E_USER_WARNING);
-} 
-else
-{
-    if($_POST["username"] != '' && $num_rows < 1) 
+if($_POST["username"] == "" || $result->$num_rows != 0) 
     {
-        $query = "INSERT INTO Users (user_id) VALUES (\"$username\");";
-
-        if ($mysqli->query($query) == TRUE) 
-        {
-            printf("User saved.");
-        }
-        else 
-        {
-            printf("Username is in use.");
-        }
-
+        $query = "INSERT INTO Users (user_id) VALUES ('$username')";
+        $result = mysqli_query($mysqli,$query);
+        printf("Invalid or preexisting Username.");
+        
     } 
-    else 
+else 
     {
-        printf("Invalid Username.");
+        $query = "INSERT INTO Users (user_id) VALUES ('$username')";
+        $result = mysqli_query($mysqli,$sql);
+        printf("User saved.");
     }
-}
 
-
+if($result = $mysqli->query($query))
+    {
+        $result->free();
+    }
  /* free result set */
- $result->free();
-
+ 
 /* close connection */
 $mysqli->close();
 ?>

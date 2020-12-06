@@ -2,8 +2,6 @@
 $mysqli = new mysqli("mysql.eecs.ku.edu", "nahathboonyasit", "umee4coh",
 "nahathboonyasit");
 
-$username = $_POST ["username"];
-
 /* check connection */
 if ($mysqli->connect_errno) {
  printf("Connect failed: %s\n", $mysqli->connect_error);
@@ -12,15 +10,22 @@ if ($mysqli->connect_errno) {
 
 $query = "SELECT user_id FROM Users where user_id='".$username."'";
 
-if($result = mysql_query($query) || $username == "")
+if($_POST["username"] != '' && $num_rows < 1)
 {
-    printf("You have entered an invalid or preexisting username.");
+    $query = "SELECT user_id FROM Users WHERE user_id='$username'";
+    if($result = mysqli_query($mysqli,$query))
+    {
+        printf("You have entered an invalid or preexisting username.");
+    }
+    else if($mysqli->query($query) == TRUE)
+    {
+        printf("User has been saved.");
+    }
+    
 }
 else
 {
-    $query = "SELECT user_id FROM Users WHERE user_id='$username'";
-    $result = mysqli_query($mysqli,$query);
-    printf("User has been saved.");
+    printf("You have entered an invalid or preexisting username.");
 }
 
 $query = "SELECT user_id";

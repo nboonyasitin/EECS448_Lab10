@@ -7,37 +7,40 @@ if ($mysqli->connect_errno) {
  printf("Connect failed: %s\n", $mysqli->connect_error);
  exit();
 }
+$username = $_POST["username"];
 
 $query = "SELECT user_id FROM Users where user_id='".$username."'";
 
-if($_POST["username"] != '' && $num_rows < 1)
+if ($result = mysql_query($query)) 
 {
-    $query = "SELECT user_id FROM Users WHERE user_id='$username'";
-    if($result = mysqli_query($mysqli,$query))
-    {
-        printf("You have entered an invalid or preexisting username.");
-    }
-    else if($mysqli->query($query) == TRUE)
-    {
-        printf("User has been saved.");
-    }
-    
-}
+    trigger_error('Exists.', E_USER_WARNING);
+} 
 else
 {
-    printf("You have entered an invalid or preexisting username.");
+    if($_POST["username"] != '' && $num_rows < 1) 
+    {
+        $query = "INSERT INTO Users (user_id) VALUES (\"$username\");";
+
+        if ($mysqli->query($query) == TRUE) 
+        {
+            printf("User saved.");
+        }
+        else 
+        {
+            printf("Username is in use.");
+        }
+
+    } 
+    else 
+    {
+        printf("Invalid Username.");
+    }
 }
 
-$query = "SELECT user_id";
-if ($result = $mysqli->query($query)) {
- /* fetch associative array */
- while ($row = $result->fetch_assoc()) {
- printf ("%s (%s)\n", $row["Username"], $row["Password"]);
- }
 
  /* free result set */
  $result->free();
-}
+
 /* close connection */
 $mysqli->close();
 ?>

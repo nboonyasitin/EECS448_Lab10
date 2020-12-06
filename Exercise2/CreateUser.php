@@ -2,23 +2,28 @@
 $mysqli = new mysqli("mysql.eecs.ku.edu", "nahathboonyasit", "umee4coh",
 "nahathboonyasit");
 
+$username = $_POST ["username"];
+
 /* check connection */
 if ($mysqli->connect_errno) {
  printf("Connect failed: %s\n", $mysqli->connect_error);
  exit();
 }
 
-$username = $_POST ["username"];
-// if($result = mysql_query($query))
-// {
-//     trigger_error('Username already in use.', E_USER_WARNING);
-// }
-// else
-// {
-//     if($_POST["username"] != '' && $num_rows < 1) {
-//         $query = "INSERT INTO Users (user_id) VALUES (\"$username\");";
-// }
+$query = "SELECT user_id FROM Users where user_id='".$username."'";
 
+if($result = mysql_query($query) || $username == "")
+{
+    echo "You have entered an invalid or preexisting username.</br>";
+}
+else
+{
+    $query = "SELECT user_id FROM Users WHERE user_id='$username'";
+    $result = mysqli_query($mysqli,$query);
+    echo "User has been saved.</br>";
+}
+
+$query = "SELECT user_id";
 if ($result = $mysqli->query($query)) {
  /* fetch associative array */
  while ($row = $result->fetch_assoc()) {

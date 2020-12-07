@@ -12,25 +12,25 @@ $username = $_POST["username"];
 
 $query = "SELECT user_id FROM Users where user_id='".$username."'";
 
-if($username == NULL || $num_rows != 0) 
+if($_POST["username"] != '' && $num_rows < 1) 
+{
+    $query = "INSERT INTO Users (user_id) VALUES (\"$username\");";
+
+    if ($mysqli->query($query) == TRUE) 
     {
-        $query = "INSERT INTO Users (user_id) VALUES ('$username')";
-        $result = mysqli_query($mysqli,$query);
-        printf("Invalid or preexisting Username.");
-        
+        printf("Username saved.");
+            
     } 
-else 
+    else
     {
-        $query = "INSERT INTO Users (user_id) VALUES ('$username')";
-        $result = mysqli_query($mysqli,$sql);
-        printf("User saved.");
+        printf("Username already in use.");
     }
 
-if($result = $mysqli->query($query))
-    {
-        $result->free();
-    }
- /* free result set */
+} 
+else 
+{
+    printf("Usernames cannot be empty.");
+}
  
 /* close connection */
 $mysqli->close();

@@ -7,33 +7,27 @@ if ($mysqli->connect_errno) {
  printf("Connect failed: %s\n", $mysqli->connect_error);
  exit();
 }
+
 $username = $_POST["userpost"];
 $post = $_POST["usercontent"];
 
-if($content == "")
+if($username == NULL || $post == NULL)
 {
-    printf("Cannot make an empty post.");
+    printf("Must have a username and post content.");
 }
 else
 {
-    $query = "SELECT user_id FROM Users WHERE user_id='$username'";
-    $result = mysqli_query($mysqli,$query);
-
-    if($result->num_rows != 0)
-    {
-        $sql = "INSERT INTO Posts (content, author_id) VALUES ('$content', '$username')";
-        $result = mysqli_query($mysqli,$sql);
+    $query = "INSERT INTO Posts (content, author_id) VALUES (\'$post\', (SELECT user_id FROM Users WHERE user_id=\'$username\'));";
+	if ($result = $mysqli->query($query)){
+		printf("Content Posted!");
     }
     else
     {
-        printf("Username does not exist on server.");
+        printf("Could not post content.");
     }
 }
 
-if($result = $mysqli->query($query))
-    {
-        $result->free();
-    }
+$result->free();
  /* free result set */
  
 /* close connection */
